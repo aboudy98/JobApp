@@ -1,35 +1,37 @@
 package com.embarxk.JobApp.JobFolder.Impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.embarxk.JobApp.JobFolder.Job;
+import com.embarxk.JobApp.JobFolder.JobRepository;
 import com.embarxk.JobApp.JobFolder.JobService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class JobServiceImpl implements JobService{
 
-    private List<Job> jobs = new ArrayList<>();
-    private Long nextId = 1L;
+    private final JobRepository jobRepository;
+ 
+
     @Override
     public List<Job> findAll() {
-       return jobs;
+       return jobRepository.findAll();
     }
 
     @Override
     public void createJob(Job job) {
-        job.setId(nextId++);
-        jobs.add(job);
+       jobRepository.save(job);
+        
         
     }
 
     @Override
     public Job findById(Long id) {
-        return jobs.stream().filter(job -> job.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return jobRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class JobServiceImpl implements JobService{
         if(jobById == null){
             throw new Exception("Job not found with id: " + id);
         }
-        jobs.removeIf(job -> job.getId().equals(id));
+        jobRepository.deleteById(id);
     }
 
     @Override
@@ -54,6 +56,7 @@ public class JobServiceImpl implements JobService{
         existingJob.setMinSalary(job.getMinSalary());
         existingJob.setMaxSalary(job.getMaxSalary());
         existingJob.setLocation(job.getLocation());
+        jobRepository.save(existingJob);
         return existingJob;
     }
     

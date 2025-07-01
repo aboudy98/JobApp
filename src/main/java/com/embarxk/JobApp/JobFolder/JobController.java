@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -18,23 +19,24 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
+@RequestMapping("/jobs")
 @RequiredArgsConstructor
 public class JobController {
     private final JobService jobService;
 
-    @GetMapping("/jobs")
+    @GetMapping
     public ResponseEntity <List<Job>> findAll(){
         return new ResponseEntity<>(jobService.findAll(),HttpStatus.OK);
     }
 
 
-    @PostMapping("/jobs")
+    @PostMapping
     public ResponseEntity <String> createJob(@RequestBody Job job) {
         jobService.createJob(job);
         return new ResponseEntity<>("Job created successfully", HttpStatus.CREATED);
     }
 
-    @GetMapping("/jobs/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Job> findById(@PathVariable Long id) throws Exception {
         Job job = jobService.findById(id);
         if(job == null) {
@@ -44,7 +46,7 @@ public class JobController {
         return new ResponseEntity<>(job, HttpStatus.OK);
     }
 
-    @DeleteMapping("/jobs/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJob(@PathVariable Long id) throws Exception{
         jobService.deleteJob(id);
 
@@ -52,7 +54,7 @@ public class JobController {
 
     }
 
-    @PutMapping("/jobs/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job job){
         try {
             Job newJob  = jobService.updateJob(id, job);
