@@ -31,5 +31,30 @@ public class JobServiceImpl implements JobService{
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void deleteJob(Long id) throws Exception {
+        Job jobById = findById(id);
+        if(jobById == null){
+            throw new Exception("Job not found with id: " + id);
+        }
+        jobs.removeIf(job -> job.getId().equals(id));
+    }
+
+    @Override
+    public Job updateJob(Long id, Job job) throws Exception {
+       
+        Job existingJob = findById(id);
+        if(existingJob == null) {
+            throw new Exception("Job not found with id: " + id);
+        }
+        
+        existingJob.setTitle(job.getTitle());
+        existingJob.setDescription(job.getDescription());
+        existingJob.setMinSalary(job.getMinSalary());
+        existingJob.setMaxSalary(job.getMaxSalary());
+        existingJob.setLocation(job.getLocation());
+        return existingJob;
+    }
     
 }
