@@ -3,6 +3,7 @@ package com.embarxk.JobApp.Company;
 import java.util.List;
 
 import com.embarxk.JobApp.JobFolder.Job;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,8 @@ public class Company {
     private String name;
     private String description;
 
-    @OneToMany
+    @JsonIgnore // this is used to remove json callback
+    @OneToMany(mappedBy = "company")
     private List<Job> jobs;
     
 }

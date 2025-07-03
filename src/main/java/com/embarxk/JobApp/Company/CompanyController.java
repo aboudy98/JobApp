@@ -43,6 +43,16 @@ public class CompanyController {
         companyService.deleteCompany(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> findCompanyById(@PathVariable Long id){
+        try {
+            Company company = companyService.findCompanyById(id);
+            return new ResponseEntity<>(company, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
    
     
 }
